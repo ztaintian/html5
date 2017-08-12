@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>web-workers</title>
+</head>
+<body>
+	<div>conut number:<ontput id="result"></ontput></div>
+	<button onclick="start()">开始计数</button>
+	<button onclick="stop()">开始计数</button>
+</body>
+<script type="text/javascript">
+var w;
+function start(){
+	if(typeof(Worker)){
+		if(typeof(w) == 'undefined'){
+			w = new Worker('web-workers.js');
+			console.log(w)
+		}
+        w.onmessage = function(event) {
+        	console.log(event)
+            document.getElementById("result").innerHTML = event.data;
+        };
+	}else{
+		documnet.innerHTML = '你的浏览器不支持web-workers功能'
+	}
+}
+</script>
+</html>

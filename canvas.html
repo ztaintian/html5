@@ -4,15 +4,67 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 </head>
-<script>
-	window.onload=function(){
-		var canvas = document.querySelector('#canvas');
-		var ctx = canvas.getContext('2d');
-		ctx.fillStyle="red";
-		ctx.fillRect(0,0,150,75);
-	}
-</script>
 <body>
-	<canvas width="100" height="100" id="canvas" style="border:1px solid #000;"></canvas>
+	<canvas id="cvs"  width="470" height="480" style="border:1px solid #ccc;margin:20px auto;display: block;">
+        当前浏览器不支持canvas
+        <!-- 如果浏览器支持canvas，则canvas标签里的内容不会显示出来 -->
+</canvas>
 </body>
+<script>
+        // 获取canvas元素
+        // var cvs = document.getElementById("cvs");
+        // //创建image对象
+        // var imgObj = new Image();
+        // imgObj.src = "http://images.cnblogs.com/cnblogs_com/html5test/359114/r_test.jpg";
+        // //待图片加载完后，将其显示在canvas上
+        // imgObj.onload = function(){
+	       //  var ctx = cvs.getContext('2d');
+	       //  ctx.drawImage(this, 0, 0);//this即是imgObj,保持图片的原始大小：470*480
+	       //  //ctx.drawImage(this, 0, 0,1024,768);//改变图片的大小到1024*768
+        // }
+
+var cvs = document.getElementById('cvs');
+var imgObj = new Image();
+imgObj.src = "http://images.cnblogs.com/cnblogs_com/html5test/359114/r_test.jpg";
+//待图片加载完后，将其显示在canvas上
+var ctx = cvs.getContext('2d');
+
+// var ctx = cvs.getContext('2d');
+cvs.width = 600;
+cvs.height = 600;
+cvs.style.border = "1px solid #ccc";
+
+function drawLine(arr,linecolor) {
+    ctx.beginPath();
+    ctx.strokeStyle = linecolor;
+    ctx.moveTo(arr[0][0],arr[0][1]);
+    for (var i=1; i<arr.length; i++) {
+        ctx.lineTo(arr[i][0],arr[i][1]);
+    }
+    ctx.stroke();
+    ctx.closePath();
+}
+// imgObj.onload = function(){
+//     ctx.drawImage(this, 0, 0);//this即是imgObj,保持图片的原始大小：470*480
+//     //ctx.drawImage(this, 0, 0,1024,768);//改变图片的大小到1024*768
+// }
+
+// // 鼠标跟随的事件
+function mouseEvent() {
+    window.onmousemove = function (e) {
+
+        if (e.target.id === "cvs") {
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            // imgObj.onload = function(){}
+            ctx.drawImage(imgObj, 0, 0);
+            drawLine([ [0,e.clientY], [600,e.clientY] ], "red");
+            drawLine([ [e.clientX,0], [e.clientX,600] ], "red");
+            // console.log(e.target);
+            // console.log(e.clientX+':'+e.clientY);
+        }
+    };
+}
+mouseEvent();
+
+</script>
 </html>

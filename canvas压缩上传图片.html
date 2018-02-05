@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input type="file">
+	<div id="preview"></div>
+</body>
+<script>
+var file = document.querySelector("[type=file]");
+file.addEventListener("change", function(e) {
+	var num = 0.5;
+	if (e.target.files[0].size/(1024*1024) > 0.1) {
+		var  aa = e.target.files[0].size/(1024*1024);
+		num = 0.1/aa.toFixed(1);
+		console.log(num);
+	}
+    for (var i = 0, f; f = e.target.files[i]; i++) {
+        if (f.type.indexOf("image") !== 0) continue;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+        	console.log(e);
+            compressImage(e.target.result, num);
+        }
+        reader.readAsDataURL(f);
+    }
+}, false);
+
+function compressImage(url, num) {
+	let img = new window.Image();
+	img.src = url;
+	var compressedImages = [];
+	var canvas = document.createElement("canvas");
+	img.onload = () => {
+	   	canvas.width = img.width;
+	    canvas.height = img.height;
+	    canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height); // 这里传入img元素对象
+	    var compressed = canvas.toDataURL("image/jpeg", num);
+	    compressedImages.push(compressed);
+		var img1 = document.createElement("img");
+	    img1.src = compressedImages[0];
+		document.getElementById("preview").appendChild(img1);
+	}
+ }
+
+</script>
+</html>
